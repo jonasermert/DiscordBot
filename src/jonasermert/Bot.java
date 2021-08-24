@@ -49,7 +49,7 @@ public class Bot implements MessageCreateListener{
     public sendInvitation(){
         Invite invite = new InviteBuilder(channel)
                 .setMaxAgeInSeconds(60*60*24)
-                .setMaxUses(42)
+                .setMaxUses(10)
                 .create().join();
     }
 
