@@ -15,13 +15,20 @@ public class Bot implements MessageCreateListener{
 
     public static void main(String[] args) {
 
+        private static Logger logger = LogManager.getLogger(Bot.class);
         logger.trace("Entering application.");
+
+        if (args.length < 1) {
+            logger.error("Please provide a valid token as the first argument!");
+            return;
+        }
 
         FallbackLoggerConfiguration.setDebug(true);
         FallbackLoggerConfiguration.setTrace(true);
 
-        String token = "your token";
+        String token = args[0];
         DiscordApi api = new DiscordApiBuilder().setToken(token).login().join();
+        logger.info("You can invite the bot by using the following url: " + api.createBotInvite());
 
         api.addMessageCreateListener(event -> {
             if (event.getMessageContent().equalsIgnoreCase("!jonas")) {
@@ -36,7 +43,9 @@ public class Bot implements MessageCreateListener{
         sendInvitation();
         createServer();
 
-        System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
+        api.addServerJoinListener(event -> logger.info("Bot Joined server " + event.getServer().getName()));
+        api.addServerLeaveListener(event -> logger.info("Bot Left server " + event.getServer().getName()));
+
     }
 
     public createChannel() {
