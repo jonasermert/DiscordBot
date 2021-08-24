@@ -21,7 +21,7 @@ public class Bot {
         System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
     }
 
-    public createChannel(Server server) {
+    public createChannel() {
         ServerVoiceChannel channel = new ServerVoiceChannelBuilder(server)
                 .setName("jonas-channel")
                 .setUserlimit(10)
