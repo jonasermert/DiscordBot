@@ -1,7 +1,9 @@
-package com.github.jonasermert
+package com.github.jonasermert;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * @author Jonas Ermert
@@ -9,9 +11,14 @@ import org.javacord.api.DiscordApiBuilder;
  * @since 1.0.0
  */
 
-public class Bot {
+public class Bot implements MessageCreateListener{
 
     public static void main(String[] args) {
+
+        logger.trace("Entering application.");
+
+        FallbackLoggerConfiguration.setDebug(true);
+        FallbackLoggerConfiguration.setTrace(true);
 
         String token = "your token";
         DiscordApi api = new DiscordApiBuilder().setToken(token).login().join();
@@ -21,6 +28,9 @@ public class Bot {
                 event.getChannel().sendMessage("Hallo, ich bin Jonas Discord Bot", MessageDecoration.BOLD);
             }
         });
+
+        // Cache a maximum of 10 messages per channel for and remove messages older than 1 hour
+        api.setMessageCacheSize(10, 60*60);
 
         createChannel();
         sendInvitation();
